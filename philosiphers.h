@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:27 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/04 11:40:40 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/05 09:32:02 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct t_main_vars
 	int				t_eat;
 	int				t_sleep;
 	int				n_meals;
+	int				*sticks;
 } t_main_vars;
 
 typedef struct t_main_with_inc
@@ -50,9 +51,9 @@ long		ft_atoi(const char *str);
 int			ft_isdigit(int c);
 int			check_args(char *str, int i);
 void		*routine(void *p);
-void		eat(int eating_time, int philo, int now);
-void		think(int philo, int now);
-void		nap(int nap_time, int philo, int now);
+void		eat(int eating_time, int philo, int now, t_main_vars *t);
+void		think(int philo, int now, t_main_vars *t);
+void		nap(int nap_time, int philo, int now, t_main_vars *t);
 int			routine_logic(t_main_vars *t,struct timeval ct,t_routine_vars r);
 void		dining(t_main_vars *t,struct timeval ct,t_routine_vars r);
 int			overthinking(t_main_vars *t,struct timeval ct,t_routine_vars r);

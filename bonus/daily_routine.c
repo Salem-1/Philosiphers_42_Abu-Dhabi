@@ -6,23 +6,13 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:56:49 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/05 09:37:32 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/05 08:53:06 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosiphers.h"
 
 //inshalla
-/*
-	Srprise, each philo can eat with his fork and his colleuge fork only!!
-	->I created array of stickes for you, set the fork var to 0 or 1 accordingly, [1, 1, 1, 1, 1, 1, 1, 1, 1];
-	->This array every body can access, 
-	->use the array indexes to check which fork to eat with or not 
-	->lock the array indexes arr[2] for example while check the state with reading or writing
-	->You can do it inshalla keep moving, keep going keep swimming 
-	->go wash your clothes, get a nap and try all over again.
-
-*/
 //sync philosiphers habits
 //Kill all philosiphers and close the program
 //add eating flag for n_meals -= 1

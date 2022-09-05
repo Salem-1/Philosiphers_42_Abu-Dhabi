@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/05 09:29:41 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/04 20:36:24 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void	threading_operations(t_main_with_inc *arr_struc,
 		arr_struc[i].common = t;
 		// printf("inside main i = %d, die == %d, eat = %d, sleep = %d,  n_meals = %d\n", i, t->t_death, t->t_eat,t->t_sleep,t->n_meals);
 		arr_struc[i].index_phil = i + 1;
-		arr_struc[i].stick = 1;
 		pthread_create(&philosiphers[i], NULL,
 			 &routine, &arr_struc[i]);
 		i++;
