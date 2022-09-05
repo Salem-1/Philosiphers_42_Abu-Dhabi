@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 09:17:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/03 23:39:35 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/04 11:36:17 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_main_vars	*parse_args(int argc, char **argv)
 		}
 		i++;
 	}
-	t = malloc(sizeof(t) * 1);
+	t = malloc(sizeof(t_main_vars) * 1);
 	if (!t)
 		return (NULL);
 	// t->n_phil = malloc(sizeof(int));

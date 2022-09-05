@@ -1,7 +1,7 @@
 NAME = philosiphers
-SRC = main.c daily_routine.c   p_libs.c parse_args.c habits.c
+SRC = main.c daily_routine.c   p_libs.c p_libs2.c parse_args.c habits.c
 
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -pthread -g3
 CC = gcc
 OBJ = $(SRC:.c=.o)
 
