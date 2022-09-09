@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/05 09:29:41 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/09 07:00:44 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,14 @@ int main(int argc, char **argv)
 	t = parse_args(argc, argv);
 	if (!t)
 		return (0);
-		//I have an invalidwrite here causing valgrind issues
-		//wrong sizeof in 31 and 40 
 	philosiphers = ft_calloc(sizeof(pthread_t) , t->n_phil );
 	if (!philosiphers)
 	{
 		free(t);
 		return (0);
 	}
-	// memset((void *)(philosiphers), 0, sizeof(pthread_t) * t->n_phil);
 	pthread_mutex_init(&t->mutex, NULL);
-	//printf(" n_phils =%d, main_with_inc = %ld \n",t->n_phil, sizeof(t_main_with_inc));
-	//create cal
+	pthread_mutex_init(&t->fork_mutex, NULL);
 	arr_struc  = ft_calloc(sizeof(t_main_with_inc) ,t->n_phil );
 	if (arr_struc)
 		threading_operations(arr_struc, i, t,philosiphers);
@@ -48,6 +44,9 @@ int main(int argc, char **argv)
 void	mem_clean(t_main_with_inc *arr_struc, t_main_vars *t, pthread_t *philosiphers)
 {
 	pthread_mutex_destroy(&t->mutex);
+	pthread_mutex_destroy(&t->fork_mutex);
+	free(t->sticks);
+	free(t->greedy);
 	free(t);
 	free(philosiphers);
 	free(arr_struc);
@@ -56,13 +55,17 @@ void	mem_clean(t_main_with_inc *arr_struc, t_main_vars *t, pthread_t *philosiphe
 void	threading_operations(t_main_with_inc *arr_struc,
 		int i, t_main_vars *t, pthread_t *philosiphers)
 {
-	i = 0;
+	struct timeval	ct;
+
+	gettimeofday(&ct, NULL);
+	t->start = (ct.tv_sec * 1000000) + (ct.tv_usec );
+	t->kill_every_body = 0;
+	printf("inside main i = %d, die == %d, eat = %d, sleep = %d,  n_meals = %d\n", i, t->t_death, t->t_eat,t->t_sleep,t->n_meals);
 	while(i < t->n_phil )
 	{
 		arr_struc[i].common = t;
-		// printf("inside main i = %d, die == %d, eat = %d, sleep = %d,  n_meals = %d\n", i, t->t_death, t->t_eat,t->t_sleep,t->n_meals);
 		arr_struc[i].index_phil = i + 1;
-		arr_struc[i].stick = 1;
+		arr_struc[i].state = 't';
 		pthread_create(&philosiphers[i], NULL,
 			 &routine, &arr_struc[i]);
 		i++;

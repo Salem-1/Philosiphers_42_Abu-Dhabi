@@ -1,5 +1,5 @@
-NAME = philosiphers
-SRC = main.c daily_routine.c   p_libs.c p_libs2.c parse_args.c habits.c
+NAME = philosophers
+SRC = main.c daily_routine.c   p_libs.c p_libs2.c parse_args.c habits.c catering.c
 
 CFLAGS = -Wall -Wextra -Werror -pthread -g3
 CC = gcc

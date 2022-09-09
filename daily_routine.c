@@ -6,111 +6,98 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:56:49 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/05 09:37:32 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/09 07:20:34 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+//this is the test for greedy philosophers problem
+//make && ./philosophers 3 410 200 100
+
 #include "philosiphers.h"
+//kill everybody
+//do the shared var meals flag
+//Create ft_usleep to check the death of the philospher in each iteration
 
-//inshalla
-/*
-	Srprise, each philo can eat with his fork and his colleuge fork only!!
-	->I created array of stickes for you, set the fork var to 0 or 1 accordingly, [1, 1, 1, 1, 1, 1, 1, 1, 1];
-	->This array every body can access, 
-	->use the array indexes to check which fork to eat with or not 
-	->lock the array indexes arr[2] for example while check the state with reading or writing
-	->You can do it inshalla keep moving, keep going keep swimming 
-	->go wash your clothes, get a nap and try all over again.
+//stuck in infinite loop, check by print
 
-*/
-//sync philosiphers habits
-//Kill all philosiphers and close the program
-//add eating flag for n_meals -= 1
-//optimise/ check_leaks /Submit 
-
-//create state to track the state of the philosipher 
-/*if state thinking don't print, if state death (KILL EVERY BODY)*/
 void	*routine(void *p)
 {
 	t_main_vars		*t;
 	struct timeval	ct;
 	t_routine_vars	r;
 
+
 	t = (*(t_main_with_inc *)(p)).common;
 	pthread_mutex_lock(&t->mutex);
+	r.state = (*(t_main_with_inc *)(p)).state;
 	r.current_phil = (*(t_main_with_inc *)(p)).index_phil;
+	r.my_fork = r.current_phil - 1;
 	pthread_mutex_unlock(&t->mutex);
 	gettimeofday(&ct, NULL);
-	if (routine_logic(t, ct, r) == 0)
+	r.state= 'a';
+	if (routine_logic(t, ct, &r) == 0)
 		return (NULL);
 	return (NULL);
 }
 
-int	routine_logic(t_main_vars *t,struct timeval ct,t_routine_vars r)
+
+int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 {
-	pthread_mutex_lock(&t->mutex);
-	printf("phils = %d, die == %d, eat = %d, sleep = %d,  n_meals = %d\n",r.current_phil, t->t_death, t->t_eat,t->t_sleep,t->n_meals);
-	pthread_mutex_unlock(&t->mutex);
-	pthread_mutex_lock(&t->mutex);
-	r.survival = ct.tv_usec;
-	pthread_mutex_unlock(&t->mutex);
-	r.now = ct.tv_usec;
-	
-	while (t->t_death > ct.tv_usec - r.survival)
+	gettimeofday(&ct, NULL);
+	r->survival = (ct.tv_sec * 1000000) + (ct.tv_usec );
+	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
+	while (1)
 	{
-		
-		pthread_mutex_lock(&t->mutex);
-		if (t->n_phil < 2)
+		if(heart_attack(t, r))
+			return (0);
+		if (r->state == 't' || r->state == 'a')
+			lethal_spagetti(t, r);
+		if(heart_attack(t, r))
+			return (0);
+		if (r->state == 'e' && accomodation(t, r) == 0)
+				return (0);
+		if(heart_attack(t, r))
+			return (0);
+		if (r->state == 's' || r->state == 't' )
 		{
-			pthread_mutex_unlock(&t->mutex);
-			if (overthinking(t, ct, r) == 0)
+			if (overthinking(t, r) == 0)
 				return (0);
 		}
-		else
-			dining(t, ct, r);
-		nap(t->t_sleep, r.current_phil, r.now, t);
-		think(r.current_phil, r.now, t);
-		gettimeofday(&ct, NULL);
 	}
 	pthread_mutex_lock(&t->mutex);
-	printf("%ld Philosipher %d died\n", ct.tv_usec - r.now, r.current_phil);
+	printf("%ld Philosipher %d died in routine logic  \n",(r->update - t->start) / 1000, r->current_phil);
 	pthread_mutex_unlock(&t->mutex);
 	return (1);
 }
 
-void	dining(t_main_vars *t,struct timeval ct,t_routine_vars r)
+int	overthinking(t_main_vars *t, t_routine_vars *r)
 {
-	t->n_phil -= 2;
-	pthread_mutex_unlock(&t->mutex);
-	gettimeofday(&ct, NULL);
-	eat(t->t_eat, r.current_phil, r.now, t);
-	pthread_mutex_lock(&t->mutex);
-	t->n_phil += 2;
-	pthread_mutex_unlock(&t->mutex);
-	gettimeofday(&ct, NULL);
-	r.survival = ct.tv_usec;
+	if (r->state != 't')
+	{
+		if(heart_attack(t, r))
+			return (0);
+		pthread_mutex_lock(&t->mutex);
+		if (r->state != 't')
+			printf("%ld Philoshpher %d is thinking\n",(r->update - t->start) / 1000, r->current_phil);
+		pthread_mutex_unlock(&t->mutex);
+		r->state = 't';
+	}
+	if(heart_attack(t, r))
+			return (0);
+	return (1);
 }
 
-int	overthinking(t_main_vars *t,struct timeval ct,t_routine_vars r)
+int	accomodation(t_main_vars *t,  t_routine_vars *r)
 {
-	while (1)
-	{
-		gettimeofday(&ct, NULL);
-		pthread_mutex_lock(&t->mutex);
-		if(t->t_death > ct.tv_usec - r.survival)
-		{
-			pthread_mutex_unlock(&t->mutex);
-			pthread_mutex_lock(&t->mutex);
-			printf("%ld Philosipher %d died\n", ct.tv_usec - r.now, r.current_phil);
-			pthread_mutex_unlock(&t->mutex);
-			return 0;
-		}
-		think(r.current_phil, r.now, t);
-		pthread_mutex_lock(&t->mutex);
-		if (t->n_phil > 1)
-		{
-			pthread_mutex_unlock(&t->mutex);
-			return (1) ;
-		}
-	}
+	if(heart_attack(t, r))
+		return (0);
+	pthread_mutex_lock(&t->mutex);
+	printf("%ld Philoshpher %d is sleeping\n",(r->update - t->start) / 1000, r->current_phil);
+	pthread_mutex_unlock(&t->mutex);
+	ft_usleep(t->t_sleep);
+	r->state = 's';
+	if(heart_attack(t, r))
+		return (0);
+	return (1);
 }
