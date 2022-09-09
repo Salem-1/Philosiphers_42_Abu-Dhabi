@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:56:49 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 07:20:34 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/09 09:03:34 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,6 @@ int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 				return (0);
 		}
 	}
-	pthread_mutex_lock(&t->mutex);
-	printf("%ld Philosipher %d died in routine logic  \n",(r->update - t->start) / 1000, r->current_phil);
-	pthread_mutex_unlock(&t->mutex);
 	return (1);
 }
 
@@ -78,8 +75,13 @@ int	overthinking(t_main_vars *t, t_routine_vars *r)
 		if(heart_attack(t, r))
 			return (0);
 		pthread_mutex_lock(&t->mutex);
+		if (t->kill_every_body)
+		{
+			pthread_mutex_unlock(&t->mutex);	
+			return (0);
+		}
 		if (r->state != 't')
-			printf("%ld Philoshpher %d is thinking\n",(r->update - t->start) / 1000, r->current_phil);
+			printf("%ld Philosopher %d is thinking\n",(r->update - t->start) / 1000, r->current_phil);
 		pthread_mutex_unlock(&t->mutex);
 		r->state = 't';
 	}
@@ -93,7 +95,12 @@ int	accomodation(t_main_vars *t,  t_routine_vars *r)
 	if(heart_attack(t, r))
 		return (0);
 	pthread_mutex_lock(&t->mutex);
-	printf("%ld Philoshpher %d is sleeping\n",(r->update - t->start) / 1000, r->current_phil);
+	if (t->kill_every_body)
+	{
+		pthread_mutex_unlock(&t->mutex);	
+		return (0);
+	}
+	printf("%ld Philosopher %d is sleeping\n",(r->update - t->start) / 1000, r->current_phil);
 	pthread_mutex_unlock(&t->mutex);
 	ft_usleep(t->t_sleep);
 	r->state = 's';

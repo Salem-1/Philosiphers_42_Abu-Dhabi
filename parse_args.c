@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 09:17:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 07:15:27 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/09 08:22:23 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,7 @@ int	check_args(char *str, int i)
 			return (0);
 		i++;
 	}
-	if ((ft_atoi(str) > 2147483647)
-		|| ft_atoi(str) < (-2147483647 - 1))
+	if ((ft_atoi(str) > 2147483647) || ft_atoi(str) < (-2147483648))
 		return (0);
 	if (ft_atoi(str) < 0)
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 07:00:44 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/09 08:25:23 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	threading_operations(t_main_with_inc *arr_struc,
 	gettimeofday(&ct, NULL);
 	t->start = (ct.tv_sec * 1000000) + (ct.tv_usec );
 	t->kill_every_body = 0;
-	printf("inside main i = %d, die == %d, eat = %d, sleep = %d,  n_meals = %d\n", i, t->t_death, t->t_eat,t->t_sleep,t->n_meals);
+	// printf(val"inside main i = %d, die == %d, eat = %d, sleep = %d,  n_meals = %d\n", i, t->t_death, t->t_eat,t->t_sleep,t->n_meals);
 	while(i < t->n_phil )
 	{
 		arr_struc[i].common = t;

@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:27 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 07:13:25 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/09 08:31:20 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct t_routine_vars
 
 t_main_vars	*parse_args(int argc, char **argv);
 int			heart_attack(t_main_vars *t, t_routine_vars *r);
+void		last_message(t_main_vars *t, t_routine_vars *r);
 long		ft_atoi(const char *str);
 int			ft_isdigit(int c);
 int			check_args(char *str, int i);
@@ -65,6 +66,10 @@ int			accomodation(t_main_vars *t,  t_routine_vars *r);
 int			routine_logic(t_main_vars *t,struct timeval ct,t_routine_vars *r);
 void		dining(int left_fork, int right_fork,t_main_vars *t,t_routine_vars *r);
 void			lethal_spagetti(t_main_vars *t, t_routine_vars *r);
+void		chewing(t_main_vars *t,  t_routine_vars *r);
+void		feed_1st_philosipher(t_main_vars *t,  t_routine_vars *r);
+void 		feed_last_philosipher(t_main_vars *t,  t_routine_vars *r);
+void 		feed_other_philosiphers(t_main_vars *t,  t_routine_vars *r);
 int			overthinking(t_main_vars *t,  t_routine_vars *r);
 void		mem_clean(t_main_with_inc *arr_struc, t_main_vars *t, pthread_t *philosiphers);
 void		ft_bzero(void *s, size_t n);
@@ -73,7 +78,4 @@ int			*buy_sticks(int sticks);
 void		threading_operations(t_main_with_inc *arr_struc,
 				int i, t_main_vars *t, pthread_t *philosiphers);
 void		ft_usleep(int milli);
-void		feed_1st_philosipher(t_main_vars *t,  t_routine_vars *r);
-void 		feed_last_philosipher(t_main_vars *t,  t_routine_vars *r);
-void 		feed_other_philosiphers(t_main_vars *t,  t_routine_vars *r);
 #endif

@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 09:26:29 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 07:17:25 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/09 08:33:53 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 //check for the death hour while sleeping
 void	ft_usleep(int milli)
 {
-	long	i;
-	long	wait_till_I_finish;
 	long	labs;
 	struct timeval ct;
 	long	elapsed_time;
@@ -26,14 +24,11 @@ void	ft_usleep(int milli)
 	gettimeofday(&ct, NULL);
 	init_time = ct.tv_sec * 1000000 + ct.tv_usec;
 	labs = 60;
-	i = 0;
-	wait_till_I_finish = milli * 1000;
-	while (elapsed_time / 1000 <= milli)
+	while (elapsed_time / 1000 <= milli - 1)
 	{
 		usleep(labs);
 		gettimeofday(&ct, NULL);
 		elapsed_time = ct.tv_sec * 1000000 + ct.tv_usec - init_time;
-		i += labs;
 	}
 }
 
@@ -50,22 +45,27 @@ int	heart_attack(t_main_vars *t, t_routine_vars *r)
 		return (1);
 	}
 	pthread_mutex_unlock(&t->mutex);
-	if (((r->update - r->survival) / 1000) > t->t_death)
+	if ((((r->update - r->survival) / 1000) > t->t_death) || t->n_meals == 0)
 	{
 		pthread_mutex_lock(&t->mutex);
-		if (t->kill_every_body)
+		if (t->kill_every_body || t->n_meals == 0)
 		{
 			pthread_mutex_unlock(&t->mutex);
 			return (1);
 		}
-		t->kill_every_body = 1;
-		gettimeofday(&ct, NULL);
-		r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
-		printf("%ld Philosipher %d died heart_attack, value %ld, death %d\n",(r->update - t->start) / 1000, r->current_phil, ((r->update - r->survival) / 1000), t->t_death);
-		pthread_mutex_unlock(&t->mutex);	
+		last_message(t, r);
+		pthread_mutex_unlock(&t->mutex);
 		return (1);
 	}
 	return (0);
+}
+void	last_message(t_main_vars *t, t_routine_vars *r)
+{
+	struct timeval ct;
+	t->kill_every_body = 1;
+	gettimeofday(&ct, NULL);
+	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
+	printf("%ld Philosopher %d died\n",(r->update - t->start) / 1000, r->current_phil);
 }
 
 void	*ft_calloc(size_t count, size_t size)
