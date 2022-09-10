@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:56:49 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 09:03:34 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/10 10:47:22 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
 	while (1)
 	{
+	
 		if(heart_attack(t, r))
 			return (0);
 		if (r->state == 't' || r->state == 'a')
@@ -81,7 +82,7 @@ int	overthinking(t_main_vars *t, t_routine_vars *r)
 			return (0);
 		}
 		if (r->state != 't')
-			printf("%ld Philosopher %d is thinking\n",(r->update - t->start) / 1000, r->current_phil);
+			printf("%ld %d is thinking\n",(r->update - t->start) / 1000, r->current_phil);
 		pthread_mutex_unlock(&t->mutex);
 		r->state = 't';
 	}
@@ -100,7 +101,7 @@ int	accomodation(t_main_vars *t,  t_routine_vars *r)
 		pthread_mutex_unlock(&t->mutex);	
 		return (0);
 	}
-	printf("%ld Philosopher %d is sleeping\n",(r->update - t->start) / 1000, r->current_phil);
+	printf("%ld %d is sleeping\n",(r->update - t->start) / 1000, r->current_phil);
 	pthread_mutex_unlock(&t->mutex);
 	ft_usleep(t->t_sleep);
 	r->state = 's';

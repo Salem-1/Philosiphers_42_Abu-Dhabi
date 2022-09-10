@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 09:17:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 08:22:23 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/10 13:36:32 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,22 @@ t_main_vars	*parse_args(int argc, char **argv)
 	t->t_sleep = ft_atoi(argv[4]);
 	t->sticks = buy_sticks(t->n_phil);
 	t->greedy = empty_stomach(t->n_phil);
+	t->fork_mutex = give_me_my_fork_please(t);
 	if (argc == 6)
 		t->n_meals = ft_atoi(argv[5]);
 	else
 		t->n_meals = -1;
 	return (t);
+}
+
+pthread_mutex_t	*give_me_my_fork_please(t_main_vars	*t)
+{
+	pthread_mutex_t	*fork_locks;
+
+	fork_locks = ft_calloc(sizeof(pthread_mutex_t), t->n_phil);
+	if (!fork_locks)
+		return (NULL);
+	return (fork_locks);
 }
 
 int *empty_stomach(int n_phil)

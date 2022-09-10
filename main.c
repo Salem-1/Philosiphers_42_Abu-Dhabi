@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 08:25:23 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/10 11:05:53 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
 		return (0);
 	}
 	pthread_mutex_init(&t->mutex, NULL);
-	pthread_mutex_init(&t->fork_mutex, NULL);
+	initiate_or_destroy_fork_mutexes_please(t, 'i');
 	arr_struc  = ft_calloc(sizeof(t_main_with_inc) ,t->n_phil );
 	if (arr_struc)
 		threading_operations(arr_struc, i, t,philosiphers);
@@ -41,10 +41,34 @@ int main(int argc, char **argv)
 	return (0);
 }
 
+void	initiate_or_destroy_fork_mutexes_please(t_main_vars *t, char flag)
+{
+	int	i;
+	
+	i = 0;
+	if (flag == 'i')
+	{
+		while (i < t->n_phil)
+		{
+			pthread_mutex_init(&t->fork_mutex[i], NULL);
+			i++;
+		}
+	}
+	else
+	{
+		while (i < t->n_phil)
+		{
+			pthread_mutex_destroy(&t->fork_mutex[i]);
+			i++;
+		}
+		free(t->fork_mutex);
+	}
+
+}
 void	mem_clean(t_main_with_inc *arr_struc, t_main_vars *t, pthread_t *philosiphers)
 {
 	pthread_mutex_destroy(&t->mutex);
-	pthread_mutex_destroy(&t->fork_mutex);
+	initiate_or_destroy_fork_mutexes_please(t, 'd');
 	free(t->sticks);
 	free(t->greedy);
 	free(t);
@@ -68,6 +92,7 @@ void	threading_operations(t_main_with_inc *arr_struc,
 		arr_struc[i].state = 't';
 		pthread_create(&philosiphers[i], NULL,
 			 &routine, &arr_struc[i]);
+		// usleep(10);
 		i++;
 	}
 	i = 0;

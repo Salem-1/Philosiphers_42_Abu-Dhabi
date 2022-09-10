@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 09:26:29 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/09 08:33:53 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/10 13:27:53 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	heart_attack(t_main_vars *t, t_routine_vars *r)
 		return (1);
 	}
 	pthread_mutex_unlock(&t->mutex);
-	if ((((r->update - r->survival) / 1000) > t->t_death) || t->n_meals == 0)
+	if ((((r->update - r->survival) / 1000) >= t->t_death) || t->n_meals == 0)
 	{
 		pthread_mutex_lock(&t->mutex);
 		if (t->kill_every_body || t->n_meals == 0)
@@ -65,7 +65,7 @@ void	last_message(t_main_vars *t, t_routine_vars *r)
 	t->kill_every_body = 1;
 	gettimeofday(&ct, NULL);
 	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
-	printf("%ld Philosopher %d died\n",(r->update - t->start) / 1000, r->current_phil);
+	printf("%ld %d died\n",(r->update - t->start) / 1000, r->current_phil);
 }
 
 void	*ft_calloc(size_t count, size_t size)
