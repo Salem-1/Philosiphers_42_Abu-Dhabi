@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 11:05:53 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/10 18:13:47 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ void	mem_clean(t_main_with_inc *arr_struc, t_main_vars *t, pthread_t *philosiphe
 	free(arr_struc);
 }
 
+/*
+	if
+*/
 void	threading_operations(t_main_with_inc *arr_struc,
 		int i, t_main_vars *t, pthread_t *philosiphers)
 {
@@ -90,6 +93,7 @@ void	threading_operations(t_main_with_inc *arr_struc,
 		arr_struc[i].common = t;
 		arr_struc[i].index_phil = i + 1;
 		arr_struc[i].state = 't';
+		arr_struc[i].food_sched = !((i + 1) % 2 == 0);
 		pthread_create(&philosiphers[i], NULL,
 			 &routine, &arr_struc[i]);
 		// usleep(10);

@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:27 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 08:32:11 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/10 19:10:08 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct t_main_with_inc
 {
 	t_main_vars	*common;
 	int			index_phil;
+	int			food_sched;
 	char		state;
 } t_main_with_inc;
 //consider adding th survival to the struct above as int
@@ -50,6 +51,7 @@ typedef struct t_routine_vars
 	long	update;
 	int		my_fork;
 	char	state;
+	int		my_turn;
 } t_routine_vars;
 
 pthread_mutex_t	*give_me_my_fork_please(t_main_vars	*t);
@@ -80,4 +82,5 @@ void			threading_operations(t_main_with_inc *arr_struc,
 					int i, t_main_vars *t, pthread_t *philosiphers);
 void			ft_usleep(int milli);
 void			initiate_or_destroy_fork_mutexes_please(t_main_vars *t, char flag);
+void			start_eating(t_main_vars *t,  t_routine_vars *r);
 #endif

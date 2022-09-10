@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:56:49 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 10:47:22 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/10 19:27:20 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	*routine(void *p)
 	r.state = (*(t_main_with_inc *)(p)).state;
 	r.current_phil = (*(t_main_with_inc *)(p)).index_phil;
 	r.my_fork = r.current_phil - 1;
+	r.my_turn = (*(t_main_with_inc *)(p)).food_sched;
 	pthread_mutex_unlock(&t->mutex);
 	gettimeofday(&ct, NULL);
 	r.state= 'a';
@@ -49,7 +50,7 @@ int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
 	while (1)
 	{
-	
+	//	start_eating(t, r);
 		if(heart_attack(t, r))
 			return (0);
 		if (r->state == 't' || r->state == 'a')
@@ -69,6 +70,27 @@ int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 	return (1);
 }
 
+void start_eating(t_main_vars *t,  t_routine_vars *r)
+{
+	if ((t->n_phil % 2 == 0))
+	{
+		if (!r->my_turn)
+		{
+			usleep(500);
+			r->my_turn = 1;
+		}
+	}
+	else 
+	{
+		if (r->my_turn)
+		{
+			usleep(500);
+			r->my_turn = 0;
+		}
+		
+	}
+
+}
 int	overthinking(t_main_vars *t, t_routine_vars *r)
 {
 	if (r->state != 't')
