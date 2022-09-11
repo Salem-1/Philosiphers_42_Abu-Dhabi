@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 09:17:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 13:36:32 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 14:21:43 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,27 @@ t_main_vars	*parse_args(int argc, char **argv)
 	t->greedy = empty_stomach(t->n_phil);
 	t->fork_mutex = give_me_my_fork_please(t);
 	if (argc == 6)
-		t->n_meals = ft_atoi(argv[5]);
+		t->n_meals = give_me_meal_boxes_please(ft_atoi(argv[5]), t);
 	else
-		t->n_meals = -1;
+		t->n_meals = give_me_meal_boxes_please(-10, t);
 	return (t);
+}
+
+int	*give_me_meal_boxes_please(int meals, t_main_vars	*t)
+{
+	int	*happy_meal;
+	int	i;
+
+	i = 0;
+	happy_meal = ft_calloc(sizeof(int), t->n_phil);
+	if (!happy_meal)
+		return (NULL);
+	while (i < t->n_phil)
+	{
+		happy_meal[i] = meals;
+		i++;
+	}
+	return (happy_meal);
 }
 
 pthread_mutex_t	*give_me_my_fork_please(t_main_vars	*t)

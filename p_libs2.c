@@ -6,14 +6,14 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 09:26:29 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 13:27:53 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 15:49:58 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosiphers.h"
 
 //check for the death hour while sleeping
-void	ft_usleep(int milli)
+void	ft_usleep(int milli, t_main_vars *t, t_routine_vars *r)
 {
 	long	labs;
 	struct timeval ct;
@@ -29,6 +29,8 @@ void	ft_usleep(int milli)
 		usleep(labs);
 		gettimeofday(&ct, NULL);
 		elapsed_time = ct.tv_sec * 1000000 + ct.tv_usec - init_time;
+		if (heart_attack(t, r))
+			return ;
 	}
 }
 
@@ -45,10 +47,11 @@ int	heart_attack(t_main_vars *t, t_routine_vars *r)
 		return (1);
 	}
 	pthread_mutex_unlock(&t->mutex);
-	if ((((r->update - r->survival) / 1000) >= t->t_death) || t->n_meals == 0)
+	if ((((r->update - r->survival) / 1000) >= t->t_death)
+			|| check_meals(t))
 	{
 		pthread_mutex_lock(&t->mutex);
-		if (t->kill_every_body || t->n_meals == 0)
+		if (t->kill_every_body || check_meals(t))
 		{
 			pthread_mutex_unlock(&t->mutex);
 			return (1);
@@ -59,10 +62,13 @@ int	heart_attack(t_main_vars *t, t_routine_vars *r)
 	}
 	return (0);
 }
+
+
+
 void	last_message(t_main_vars *t, t_routine_vars *r)
 {
 	struct timeval ct;
-	t->kill_every_body = 1;
+	kill_in_main(t);
 	gettimeofday(&ct, NULL);
 	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
 	printf("%ld %d died\n",(r->update - t->start) / 1000, r->current_phil);

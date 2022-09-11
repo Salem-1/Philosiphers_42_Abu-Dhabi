@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 15:21:46 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/11 13:28:02 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 15:49:20 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,9 @@
 
 void	lethal_spagetti(t_main_vars *t, t_routine_vars *r)
 {
-	// if (r->current_phil != t->n_phil)
-	// {
 	if (t->n_phil == 1)
 		return ;
 	feed_other_philosiphers(t, r);
-	// }
-	// else
-	// {
-	// 	feed_last_philosipher(t, r);
-	// }
-
 }
 
 void	dining(int left_fork, int right_fork, t_main_vars *t, t_routine_vars *r)
@@ -37,14 +29,16 @@ void	dining(int left_fork, int right_fork, t_main_vars *t, t_routine_vars *r)
 	t->sticks[right_fork] = 0;
 	t->greedy[right_fork] = r->current_phil;
 	pthread_mutex_unlock(&t->fork_mutex[right_fork]);
-	if (t->n_meals != -1)
-		t->n_meals -= 1;
 	if(heart_attack(t, r))
 		return ;
 	pthread_mutex_lock(&t->mutex);
 	chewing(t, r);
+	pthread_mutex_lock(&t->meals_mutex);
+	if (t->n_meals[r->current_phil - 1] > 0)
+		t->n_meals[r->current_phil - 1] -= 1;
+	pthread_mutex_unlock(&t->meals_mutex);
 	pthread_mutex_unlock(&t->mutex);
-	ft_usleep(t->t_eat);
+	ft_usleep(t->t_eat, t, r);
 	pthread_mutex_lock(&t->fork_mutex[left_fork]);
 	t->sticks[left_fork] = 1;
 	pthread_mutex_unlock(&t->fork_mutex[left_fork]);

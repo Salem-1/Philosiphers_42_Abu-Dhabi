@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:56:49 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/11 13:28:09 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 16:48:43 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 			if (overthinking(t, r) == 0)
 				return (0);
 		}
-		// usleep(200);
+		usleep(200);
 	}
 	return (1);
 }
@@ -77,7 +77,7 @@ void start_eating(t_main_vars *t,  t_routine_vars *r)
 	{
 		if (!r->my_turn)
 		{
-			usleep(500);
+			usleep(350);
 			r->my_turn = 1;
 		}
 	}
@@ -85,7 +85,7 @@ void start_eating(t_main_vars *t,  t_routine_vars *r)
 	{
 		if (r->my_turn)
 		{
-			usleep(500);
+			usleep(350);
 			r->my_turn = 0;
 		}
 		
@@ -126,7 +126,7 @@ int	accomodation(t_main_vars *t,  t_routine_vars *r)
 	}
 	printf("%ld %d is sleeping\n",(r->update - t->start) / 1000, r->current_phil);
 	pthread_mutex_unlock(&t->mutex);
-	ft_usleep(t->t_sleep);
+	ft_usleep(t->t_sleep, t, r);
 	r->state = 's';
 	if(heart_attack(t, r))
 		return (0);

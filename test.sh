@@ -2,31 +2,33 @@
 
 make re
 echo "./philo 1 800 200 200"
-
 ./philo 1 800 200 200
+valgrind ./philo 1 800 200 200
+valgrind --tool=helgrind ./philo 1 800 200 200
 echo "shouldn't eat , die\n"
 
-./philo 5 800 200 200
-echo "Nobody should die\n"
 
-./philo 4 410 200 200
+
+
+valgrind --tool=helgrind ./philo 4 410 200 200
 echo "No one should die\n"
 
-./philo 4 310 200 100
+valgrind --tool=helgrind ./philo 4 310 200 100
 philosipher should die
 
-./philo 3 1000 500 600 
+valgrind --tool=helgrind ./philo 3 1000 500 600 
 philosopher should die
 
-./philo 5 200 100 60
+valgrind --tool=helgrind ./philo 5 200 100 60
 philosopher should die
 
-./philo 4 500 400 300
+valgrind --tool=helgrind ./philo 4 500 400 300
+a philosipher should die
 
-./philo 3 700 200 200
+valgrind --tool=helgrind ./philo 3 700 200 200
 all live
 
-./philo 2 200 200 100
+ 
 a philosipher should die	
 echo "---------------------------------"
 #sleep  3

@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:27 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/11 10:02:44 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 15:49:00 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ typedef struct t_main_vars
 	pthread_mutex_t	mutex;
 	pthread_mutex_t	*fork_mutex;
 	pthread_mutex_t	state_mutex;
+	pthread_mutex_t	meals_mutex;
 	int				n_phil;
 	int				t_death;
 	int				t_eat;
 	int				t_sleep;
-	int				n_meals;
+	int				*n_meals;
 	int				*sticks;
 	int				*greedy;
 	int				kill_every_body;
@@ -57,6 +58,7 @@ typedef struct t_routine_vars
 pthread_mutex_t	*give_me_my_fork_please(t_main_vars	*t);
 t_main_vars		*parse_args(int argc, char **argv);
 int				heart_attack(t_main_vars *t, t_routine_vars *r);
+void			kill_in_main(t_main_vars *t);
 void			last_message(t_main_vars *t, t_routine_vars *r);
 long			ft_atoi(const char *str);
 int				ft_isdigit(int c);
@@ -80,9 +82,11 @@ void			*ft_calloc(size_t count, size_t size);
 int				*buy_sticks(int sticks);
 void			threading_operations(t_main_with_inc *arr_struc,
 					int i, t_main_vars *t, pthread_t *philosiphers);
-void			ft_usleep(int milli);
+void			ft_usleep(int milli, t_main_vars *t, t_routine_vars *r);
 void			initiate_or_destroy_fork_mutexes_please(t_main_vars *t, char flag);
 void			start_eating(t_main_vars *t,  t_routine_vars *r);
-void	lock_forks(t_main_vars *t, int left, int right);
-void	unlock_forks(t_main_vars *t, int left, int right);
+void			lock_forks(t_main_vars *t, int left, int right);
+void			unlock_forks(t_main_vars *t, int left, int right);
+int				*give_me_meal_boxes_please(int meals, t_main_vars	*t);
+int				check_meals(t_main_vars *t);
 #endif
