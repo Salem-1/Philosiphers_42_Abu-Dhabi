@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 15:21:46 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 13:44:09 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 13:28:02 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 void	lethal_spagetti(t_main_vars *t, t_routine_vars *r)
 {
-	if (r->current_phil != t->n_phil)
-	{
-		feed_other_philosiphers(t, r);
-	}
-	else
-	{
-		feed_last_philosipher(t, r);
-	}
+	// if (r->current_phil != t->n_phil)
+	// {
+	if (t->n_phil == 1)
+		return ;
+	feed_other_philosiphers(t, r);
+	// }
+	// else
+	// {
+	// 	feed_last_philosipher(t, r);
+	// }
 
 }
 
@@ -43,7 +45,6 @@ void	dining(int left_fork, int right_fork, t_main_vars *t, t_routine_vars *r)
 	chewing(t, r);
 	pthread_mutex_unlock(&t->mutex);
 	ft_usleep(t->t_eat);
-	
 	pthread_mutex_lock(&t->fork_mutex[left_fork]);
 	t->sticks[left_fork] = 1;
 	pthread_mutex_unlock(&t->fork_mutex[left_fork]);
@@ -68,73 +69,31 @@ void	chewing(t_main_vars *t,  t_routine_vars *r)
 	gettimeofday(&ct, NULL);
 	r->survival = (ct.tv_sec * 1000000) + (ct.tv_usec );
 }
-// void	feed_1st_philosipher(t_main_vars *t,  t_routine_vars *r)
-// {
-// 	pthread_mutex_lock(&t->fork_mutex[r->my_fork]);
-// 	pthread_mutex_lock(&t->fork_mutex[r->my_fork + 1]);
-// 	if (t->sticks[r->my_fork] && t->sticks[r->my_fork + 1]
-// 			&&((t->greedy[r->my_fork] != r->current_phil) &&
-// 				(t->greedy[r->my_fork + 1] != r->current_phil)
-// 				))
-// 	{
-	
-// 	pthread_mutex_unlock(&t->fork_mutex[r->my_fork + 1]);
-// 	pthread_mutex_unlock(&t->fork_mutex[r->my_fork]);
-// 		dining(r->my_fork, r->my_fork + 1, t, r);
-// 	pthread_mutex_lock(&t->fork_mutex[r->my_fork]);
-// 	pthread_mutex_lock(&t->fork_mutex[r->my_fork + 1]);
-// 	}
-// 	pthread_mutex_unlock(&t->fork_mutex[r->my_fork + 1]);
-// 	pthread_mutex_unlock(&t->fork_mutex[r->my_fork]);
-// }
-//4 is greedy philosipher
-
-void feed_last_philosipher(t_main_vars *t,  t_routine_vars *r)
-{
-	
-
-	pthread_mutex_lock(&t->fork_mutex[r->my_fork]);
-	if (t->sticks[r->my_fork] && (t->greedy[r->my_fork] != r->current_phil)) 
-	{
-		pthread_mutex_unlock(&t->fork_mutex[r->my_fork]);
-		pthread_mutex_lock(&t->fork_mutex[0]);
-		if(t->sticks[0]  && (t->greedy[0] != r->current_phil))
-		{
-			pthread_mutex_unlock(&t->fork_mutex[0]);
-			dining(r->my_fork, 0, t, r);
-			pthread_mutex_lock(&t->fork_mutex[0]);
-		}
-		pthread_mutex_unlock(&t->fork_mutex[0]);
-		pthread_mutex_lock(&t->fork_mutex[r->my_fork]);
-	}
-	pthread_mutex_unlock(&t->fork_mutex[r->my_fork]);
-}
 
 void feed_other_philosiphers(t_main_vars *t,  t_routine_vars *r)
 {
-	pthread_mutex_lock(&t->fork_mutex[r->my_fork]);
-	if (t->sticks[r->my_fork] && (t->greedy[r->my_fork] != r->current_phil))
+	int	left;
+	int	right;
+
+	left = r->my_fork;
+	if (r->current_phil == t->n_phil)
+		right = 0;
+	else
+		right = left + 1;
+	pthread_mutex_lock(&t->fork_mutex[left]);
+	if (t->sticks[left] && (t->greedy[left] != r->current_phil))
 	{
-		pthread_mutex_unlock(&t->fork_mutex[r->my_fork]);
-		pthread_mutex_lock(&t->fork_mutex[r->my_fork + 1]);
-		if (t->sticks[r->my_fork + 1] && (t->greedy[r->my_fork + 1] != r->current_phil))
+		pthread_mutex_unlock(&t->fork_mutex[left]);
+		pthread_mutex_lock(&t->fork_mutex[right]);
+		if (t->sticks[right] && (t->greedy[right] != r->current_phil))
 		{
-			pthread_mutex_unlock(&t->fork_mutex[r->my_fork + 1]);
-			dining(r->my_fork, r->my_fork + 1, t, r);
-			pthread_mutex_lock(&t->fork_mutex[r->my_fork + 1]);
+			pthread_mutex_unlock(&t->fork_mutex[right]);
+			dining(left, right, t, r);
+			pthread_mutex_lock(&t->fork_mutex[right]);
 		}
-		pthread_mutex_unlock(&t->fork_mutex[r->my_fork + 1]);
+		pthread_mutex_unlock(&t->fork_mutex[right]);
 		
-		pthread_mutex_lock(&t->fork_mutex[r->my_fork]);
+		pthread_mutex_lock(&t->fork_mutex[left]);
 	}
-		pthread_mutex_unlock(&t->fork_mutex[r->my_fork]);
+		pthread_mutex_unlock(&t->fork_mutex[left]);
 }
-
-
-
-
-
-
-
-
-

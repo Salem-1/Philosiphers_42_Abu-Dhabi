@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:24 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 18:13:47 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 11:23:00 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	threading_operations(t_main_with_inc *arr_struc,
 		arr_struc[i].food_sched = !((i + 1) % 2 == 0);
 		pthread_create(&philosiphers[i], NULL,
 			 &routine, &arr_struc[i]);
-		// usleep(10);
+		usleep(400);
 		i++;
 	}
 	i = 0;

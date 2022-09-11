@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 08:56:49 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 19:27:20 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 13:28:09 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
 	while (1)
 	{
-	//	start_eating(t, r);
+		start_eating(t, r);
 		if(heart_attack(t, r))
 			return (0);
 		if (r->state == 't' || r->state == 'a')
@@ -66,6 +66,7 @@ int	routine_logic(t_main_vars *t,struct timeval ct, t_routine_vars *r)
 			if (overthinking(t, r) == 0)
 				return (0);
 		}
+		// usleep(200);
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 18:44:27 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/10 19:10:08 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 10:02:44 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,6 @@ void			threading_operations(t_main_with_inc *arr_struc,
 void			ft_usleep(int milli);
 void			initiate_or_destroy_fork_mutexes_please(t_main_vars *t, char flag);
 void			start_eating(t_main_vars *t,  t_routine_vars *r);
+void	lock_forks(t_main_vars *t, int left, int right);
+void	unlock_forks(t_main_vars *t, int left, int right);
 #endif
