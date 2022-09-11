@@ -6,7 +6,7 @@
 /*   By: ahsalem <ahsalem@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/05 15:21:46 by ahsalem           #+#    #+#             */
-/*   Updated: 2022/09/11 15:49:20 by ahsalem          ###   ########.fr       */
+/*   Updated: 2022/09/11 19:13:36 by ahsalem          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	dining(int left_fork, int right_fork, t_main_vars *t, t_routine_vars *r)
 	t->sticks[right_fork] = 0;
 	t->greedy[right_fork] = r->current_phil;
 	pthread_mutex_unlock(&t->fork_mutex[right_fork]);
-	if(heart_attack(t, r))
+	if (heart_attack(t, r))
 		return ;
 	pthread_mutex_lock(&t->mutex);
 	chewing(t, r);
@@ -45,26 +45,28 @@ void	dining(int left_fork, int right_fork, t_main_vars *t, t_routine_vars *r)
 	pthread_mutex_lock(&t->fork_mutex[right_fork]);
 	t->sticks[right_fork] = 1;
 	pthread_mutex_unlock(&t->fork_mutex[right_fork]);
-	if(heart_attack(t, r))
-		return ;
-	r->state= 'e';
+	r->state = 'e';
 }
 
-void	chewing(t_main_vars *t,  t_routine_vars *r)
+void	chewing(t_main_vars *t, t_routine_vars *r)
 {
-	struct timeval ct;
+	struct timeval	ct;
+
 	if (t->kill_every_body)
 		return ;
 	gettimeofday(&ct, NULL);
-	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec );
-	printf("%ld %d has taken a fork\n",(r->update - t->start) / 1000, r->current_phil);
-	printf("%ld %d has taken a fork\n",(r->update - t->start) / 1000, r->current_phil);
-	printf("%ld %d is eating\n",(r->update - t->start) / 1000, r->current_phil);
+	r->update = (ct.tv_sec * 1000000) + (ct.tv_usec);
+	printf("%ld %d has taken a fork\n",
+		(r->update - t->start) / 1000, r->current_phil);
+	printf("%ld %d has taken a fork\n",
+		(r->update - t->start) / 1000, r->current_phil);
+	printf("%ld %d is eating\n",
+		(r->update - t->start) / 1000, r->current_phil);
 	gettimeofday(&ct, NULL);
-	r->survival = (ct.tv_sec * 1000000) + (ct.tv_usec );
+	r->survival = (ct.tv_sec * 1000000) + (ct.tv_usec);
 }
 
-void feed_other_philosiphers(t_main_vars *t,  t_routine_vars *r)
+void	feed_other_philosiphers(t_main_vars *t, t_routine_vars *r)
 {
 	int	left;
 	int	right;
@@ -83,11 +85,26 @@ void feed_other_philosiphers(t_main_vars *t,  t_routine_vars *r)
 		{
 			pthread_mutex_unlock(&t->fork_mutex[right]);
 			dining(left, right, t, r);
+			if (heart_attack(t, r))
+				return ;
 			pthread_mutex_lock(&t->fork_mutex[right]);
 		}
 		pthread_mutex_unlock(&t->fork_mutex[right]);
-		
 		pthread_mutex_lock(&t->fork_mutex[left]);
 	}
-		pthread_mutex_unlock(&t->fork_mutex[left]);
+	pthread_mutex_unlock(&t->fork_mutex[left]);
+}
+
+int	*buy_sticks(int sticks)
+{
+	int	*give_me_my_fork_please;
+	int	i;
+
+	i = -1;
+	give_me_my_fork_please = ft_calloc(sizeof(int), sticks);
+	if (!give_me_my_fork_please)
+		return (NULL);
+	while (++i < sticks)
+		give_me_my_fork_please[i] = 1;
+	return (give_me_my_fork_please);
 }

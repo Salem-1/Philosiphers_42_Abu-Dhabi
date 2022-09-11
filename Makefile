@@ -1,5 +1,5 @@
 NAME = philo
-SRC = main.c daily_routine.c   p_libs.c p_libs2.c parse_args.c habits.c catering.c \
+SRC = main.c daily_routine.c   p_libs.c p_libs2.c parse_args.c catering.c \
 		threading_operations.c
 
 CFLAGS = -Wall -Wextra -Werror -pthread -g3
